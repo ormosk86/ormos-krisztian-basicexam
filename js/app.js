@@ -24,12 +24,12 @@ function successAjax(xhttp) {
   statistic(userDatas);
 }
 
-getData('/json/spaceships.json', successAjax);
+getData('/json/spaceshipsArray.json', successAjax);
 
 
 // 1. feladat
-function sortSpaceships(spaceships) {
-  spaceships = spaceships.sort(function (lho, rho) {
+function sortSpaceships(spaceshipsArray) {
+  spaceshipsArray = spaceshipsArray.sort(function (lho, rho) {
     var result;
 
     if (lho.cost_in_credits > rho.cost_in_credits) {
@@ -46,36 +46,36 @@ function sortSpaceships(spaceships) {
 
 // 2. feladat
 
-function consumablesNotNull(spaceships) {
-  for (var i = spaceships.length - 1; i >= 0; --i) {
-    if (spaceships[i].consumables == null) {
-      spaceships.splice(i, 1);
+function consumablesNotNull(spaceshipsArray) {
+  for (var i = spaceshipsArray.length - 1; i >= 0; --i) {
+    if (spaceshipsArray[i].consumables == null) {
+      spaceshipsArray.splice(i, 1);
     }
   }
-  return spaceships;
+  return spaceshipsArray;
 }
 
 
 
 // 3. feladat
-function nullToUnknown(spaceships) {
-  for (var i = 0; i < spaceships.length; i++) {
-    for (var j in spaceships[i]) {
-      if (spaceships[i][j] === null) {
-        spaceships[i][j] = "unknown";
+function nullToUnknown(spaceshipsArray) {
+  for (var i = 0; i < spaceshipsArray.length; i++) {
+    for (var j in spaceshipsArray[i]) {
+      if (spaceshipsArray[i][j] === null) {
+        spaceshipsArray[i][j] = "unknown";
       }
     }
   }
-  return spaceships;
+  return spaceshipsArray;
 }
 
 
 
 // 4. feladat
-function createHtmlElements(spaceships) {
+function createHtmlElements(spaceshipsArray) {
   var spaceshipListDivElement = document.querySelector(".shapceship-list");
 
-  for (var i = 0; i < spaceships.length; i++) {
+  for (var i = 0; i < spaceshipsArray.length; i++) {
 
     var cardDivElement = document.createElement('div');
     cardDivElement.classList.add("card");
@@ -84,46 +84,41 @@ function createHtmlElements(spaceships) {
     var cardDivElementImage = document.createElement("img");
     cardDivElementImage.classList.add("image-spaceship");
     cardDivElement.appendChild(cardDivElementImage);
-    cardDivElementImage.src = "img/" + spaceships[i].image;
-    cardDivElementImage.alt = spaceships[i].model;
+    cardDivElementImage.src = "img/" + spaceshipsArray[i].image;
+    cardDivElementImage.alt = spaceshipsArray[i].model;
 
     var cardDivElementName = document.createElement("div");
     cardDivElementName.classList.add("model-spaceship");
     cardDivElement.appendChild(cardDivElementName);
-    cardDivElementName.innerText = spaceships[i].model;
+    cardDivElementName.innerText = spaceshipsArray[i].model;
 
     var cardDivElementDetails = document.createElement("div");
     cardDivElementDetails.classList.add("model-spaceship");
-    cardDivElement.appendChild(cardDivElementName);
+    cardDivElement.appendChild(cardDivElementDetails);
 
     var s = '';
-    for (var member in spaceships[i]) {
-      s += member + ': ' + spaceships[i][member] + '<br/>';
+    for (var member in spaceshipsArray[i]) {
+      s += member + ': ' + spaceshipsArray[i][member] + '<br/>';
     }
-    cardDivElementDetails.innerText = s;
+    cardDivElementDetails.innerHTML = s;
   }
 };
 
 //5. feladat
-// Készítened kell egy statisztikát, mely a shapceship-list class-ű div aljára a következő adatokat fogja beleírni:
-// -Egy fős (crew = 1) legénységgel rendelkező hajók darabszáma.
-// -A legnagyobb cargo_capacity-vel rendelkező hajó neve (model)
-// -Az összes hajó utasainak (passengers) összesített száma
-// -A leghosszabb(lengthiness) hajó képe
-function statistic(spaceships) {
+function statistic(spaceshipsArray) {
   var spaceshipListDivElement = document.querySelector(".shapceship-list");
 
   var darab = 0;
-  for (var i = 0; i < spaceships.length; i++) {
-    if (spaceships[i].crew == 1) {
+  for (var i = 0; i < spaceshipsArray.length; i++) {
+    if (spaceshipsArray[i].crew == 1) {
       darab++;
     }
   }
 
-  var max = spaceships[0].cargo_capacity;
-  for (var i = 1; i < spaceships.length; i++) {
-    if (spaceships[i].cargo_capacity > max) {
-      max = spaceships[i];
+  var max = spaceshipsArray[0].cargo_capacity;
+  for (var i = 1; i < spaceshipsArray.length; i++) {
+    if (spaceshipsArray[i].cargo_capacity > max) {
+      max = spaceshipsArray[i];
     }
   };
 
@@ -133,8 +128,8 @@ function statistic(spaceships) {
   spaceshipListDivElement.appendChild(StatisticDivElement);
   StatisticDivElement.innerHTML = "Egy fős legénységgel rendelkező hajók darabszáma: " + darab + "<br>" + "A legnagyobb cargo_capacity-vel rendelkező hajó neve: " + max + "<br>"
 
-
 };
+
 
 
 //6.feladat
