@@ -124,20 +124,49 @@ function successAjax(xhttp) {
     StatisticDivElement.innerHTML = "Egy fős legénységgel rendelkező hajók darabszáma: " + darab + "<br>" + "A legnagyobb cargo_capacity-vel rendelkező hajó neve: " + max + "<br>"
 
   };
-
-
-
   //6.feladat
 
+  function DivUpdate(spaceships) {
+    var detailsDivElement = document.querySelector(".one-spaceship");
+    var detailsDivElementImage = document.createElement('img');
+    detailsDivElement.appendChild(detailsDivElementImage);
+    detailsDivElementImage.src = "img/" + spaceships[i].image;
+    detailsDivElementImage.alt = spaceships[i].model;
 
+    var detailsDivElementName = document.createElement('div');
+    detailsDivElement.appendChild(detailsDivElementName);
+    detailsDivElementName.classList.add("spaceshipName")
+    detailsDivElementName.innerText = spaceships[i].model;
+  };
 
+  function searchCharacter(spaceships) {
+    var searchTextBox = document.querySelector("#search-text")
+    var filter = searchTextBox.value;
 
+    var filtered;
+
+    for (var i = 0; i < spaceships.length; i++) {
+      if (spaceships[i].model.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+        filtered = (spaceships[i]);
+        break;
+      }
+    }
+    if (filtered) {
+      DivUpdate(filtered)
+    } else {
+      var detailsDivElement = document.querySelector(".one-spaceship");
+      detailsDivElement.innerText = "Ship not found";
+    }
+  };
 
   sortSpaceships(userDatas);
   consumablesNotNull(userDatas);
   nullToUnknown(userDatas);
   createHtmlElements(userDatas);
   statistic(userDatas);
-};
+  DivUpdate(userDatas)
+  searchCharacter(userDatas)
 
-getData('/json/spaceshipsArray.json', successAjax);
+
+  getData('/json/spaceshipsArray.json', successAjax);
+};
